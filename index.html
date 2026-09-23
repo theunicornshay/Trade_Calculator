@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Unicorn Calc" />
+  <title>Unicorn Trade Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:            #FAF7FF;
+      --card-bg:       #FFFFFF;
+      --card-border:   #E4DBFA;
+      --text-primary:  #2B2340;
+      --subtext:       #7A6F94;
+      --accent:        #3C3489;
+      --accent-deep:   #26215C;
+      --purple-fill:   #AFA9EC;
+      --purple-fill-lt:#EEEDFE;
+      --pink-fill:     #ED93B1;
+      --pink-fill-lt:  #FBEAF0;
+      --check-border:  #D6CCF0;
+      --font-display:  'Baloo 2', sans-serif;
+      --font-body:     'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      padding: 0 0 40px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .header {
+      text-align: center;
+      padding: 32px 20px 20px;
+    }
+    .header h1 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--accent-deep);
+      letter-spacing: -0.01em;
+    }
+    .header .sparkle { font-size: 22px; vertical-align: -2px; }
+    .header p {
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--subtext);
+      margin-top: 4px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      margin: 0 16px;
+      padding: 20px 18px 22px;
+      box-shadow: 0 4px 18px rgba(60, 52, 137, 0.08);
+    }
+
+    .row-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--subtext);
+      margin: 14px 0 6px;
+    }
+    .row-label:first-child { margin-top: 0; }
+
+    .btn-row {
+      display: flex;
+      gap: 6px;
+    }
+    .pill-btn {
+      flex: 1;
+      background: none;
+      border: 1.5px solid var(--check-border);
+      color: var(--text-primary);
+      border-radius: 99px;
+      padding: 9px 0;
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pill-btn.active {
+      background: var(--purple-fill);
+      border-color: var(--accent);
+      color: var(--accent-deep);
+    }
+    .pill-btn.small { font-size: 12px; padding: 7px 0; }
+
+    .stepper {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .stepper-btn {
+      width: 42px;
+      flex-shrink: 0;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .stepper-input {
+      flex: 1;
+      text-align: center;
+      border: 1.5px solid var(--check-border);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--card-bg);
+    }
+
+    .input {
+      width: 100%;
+      border: 1.5px solid var(--check-border);
+      border-radius: 12px;
+      padding: 11px 13px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text-primary);
+      background: var(--card-bg);
+    }
+    .input:focus { outline: none; border-color: var(--accent); }
+
+    .st-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .st-box {
+      border-radius: 14px;
+      padding: 14px 15px;
+    }
+    .st-box.purple { background: var(--purple-fill-lt); }
+    .st-box.pink   { background: var(--pink-fill-lt); }
+    .st-box .tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .st-box.purple .tag { color: var(--accent-deep); }
+    .st-box.pink .tag   { color: #8A2C4C; }
+    .st-box .sub {
+      font-size: 12px;
+      color: var(--subtext);
+      margin: 3px 0 4px;
+    }
+    .st-box .dollar {
+      font-family: var(--font-display);
+      font-size: 23px;
+      font-weight: 700;
+    }
+    .st-box.purple .dollar { color: var(--accent-deep); }
+    .st-box.pink .dollar   { color: #8A2C4C; }
+
+    .collapse-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--subtext);
+      padding: 10px 0 4px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .collapse-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s;
+    }
+    .collapse-toggle.open svg { transform: rotate(180deg); }
+
+    .buffer-line {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-deep);
+      margin: 2px 0 10px;
+      min-height: 16px;
+    }
+    .hint {
+      font-size: 11px;
+      color: var(--subtext);
+      margin-top: -3px;
+      margin-bottom: 10px;
+    }
+
+    .result-grid {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .result-box {
+      flex: 1;
+      text-align: center;
+      border-radius: 12px;
+      padding: 11px 6px;
+    }
+    .result-box.c1 { background: var(--purple-fill-lt); }
+    .result-box.c2 { background: var(--pink-fill-lt); }
+    .result-box.c3 { background: #FFF3E0; }
+    .result-tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 3px;
+    }
+    .result-box.c1 .result-tag { color: var(--accent-deep); }
+    .result-box.c2 .result-tag { color: #8A2C4C; }
+    .result-box.c3 .result-tag { color: #96560C; }
+    .result-value {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .result-box.c1 .result-value { color: var(--accent-deep); }
+    .result-box.c2 .result-value { color: #8A2C4C; }
+    .result-box.c3 .result-value { color: #96560C; }
+
+    .clear-btn {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      background: none;
+      border: 1.5px solid var(--check-border);
+      color: var(--subtext);
+      border-radius: 99px;
+      padding: 10px 0;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .clear-btn:active { background: var(--purple-fill-lt); }
+
+    .footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--subtext);
+      margin: 18px 20px 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1><span class="sparkle">🦄</span> Unicorn Trade Calculator</h1>
+    <p>Stop &middot; Target &middot; Position Size</p>
+  </div>
+
+  <div class="card">
+
+    <div class="row-label">Contract Size</div>
+    <div class="btn-row" id="tier-row">
+      <button class="pill-btn" id="tier-emini" onclick="setTier('emini')">E-mini</button>
+      <button class="pill-btn active" id="tier-micro" onclick="setTier('micro')">Micro</button>
+      <button class="pill-btn" id="tier-enano" onclick="setTier('enano')">E-nano</button>
+    </div>
+
+    <div class="row-label">Instrument</div>
+    <div class="btn-row" id="instrument-row"></div>
+
+    <div class="row-label">Number of Contracts</div>
+    <div class="stepper">
+      <button class="stepper-btn" onclick="stepContracts(-1)">&minus;</button>
+      <input type="number" inputmode="numeric" class="stepper-input" id="contracts" value="1" min="1" oninput="onContractsChange()">
+      <button class="stepper-btn" onclick="stepContracts(1)">+</button>
+    </div>
+
+    <div class="st-row" style="margin-top:14px;">
+      <div>
+        <div class="row-label">Stop Loss (Points)</div>
+        <input type="number" inputmode="decimal" class="input" id="sl-points" placeholder="e.g. 30" oninput="clearRRSelection(); renderStopTarget();">
+      </div>
+      <div>
+        <div class="row-label">Take Profit (Points)</div>
+        <input type="number" inputmode="decimal" class="input" id="tp-points" placeholder="e.g. 60" oninput="clearRRSelection(); renderStopTarget();">
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:14px;">
+      <button class="pill-btn small" id="rr-1" onclick="setRRPoints(1)">1:1</button>
+      <button class="pill-btn small" id="rr-2" onclick="setRRPoints(2)">1:2</button>
+      <button class="pill-btn small" id="rr-3" onclick="setRRPoints(3)">1:3</button>
+      <button class="pill-btn small" id="rr-4" onclick="setRRPoints(4)">1:4</button>
+    </div>
+
+    <div class="st-row">
+      <div class="st-box purple">
+        <div class="tag">Stop Loss</div>
+        <div class="sub" id="sl-sub">— pts · — ticks</div>
+        <div class="dollar" id="sl-dollar">$0.00</div>
+      </div>
+      <div class="st-box pink">
+        <div class="tag">Take Profit</div>
+        <div class="sub" id="tp-sub">— pts · — ticks</div>
+        <div class="dollar" id="tp-dollar">$0.00</div>
+      </div>
+    </div>
+
+    <button class="collapse-toggle" onclick="togglePositionSize()">
+      Need to size a position instead?
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+
+    <div id="panel-size" style="display:none;">
+      <div class="row-label">Account Size</div>
+      <input type="number" inputmode="decimal" class="input" id="account-size" placeholder="e.g. 50000" oninput="renderSize()">
+      <div class="row-label">Max Drawdown (optional, for prop accounts)</div>
+      <input type="number" inputmode="decimal" class="input" id="max-dd" placeholder="e.g. 2000" oninput="renderSize()">
+      <div class="buffer-line" id="buffer-line"></div>
+
+      <div class="row-label">Risk Per Trade (%)</div>
+      <input type="number" inputmode="decimal" class="input" id="risk-pct" placeholder="e.g. 1" oninput="renderSize()">
+      <div class="row-label">Stop Distance (Ticks)</div>
+      <input type="number" inputmode="decimal" class="input" id="stop-ticks" placeholder="e.g. 10" oninput="renderSize()">
+
+      <div class="result-grid">
+        <div class="result-box c3">
+          <div class="result-tag">Max $ Risk</div>
+          <div class="result-value" id="size-maxrisk">—</div>
+        </div>
+        <div class="result-box c1">
+          <div class="result-tag">Contracts</div>
+          <div class="result-value" id="size-contracts">—</div>
+        </div>
+        <div class="result-box c2">
+          <div class="result-tag">Actual $ Risk</div>
+          <div class="result-value" id="size-actualrisk">—</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="clear-btn" onclick="clearAll()">Clear Calculator</button>
+
+  </div>
+
+  <p class="footer-note">Estimates based on standard contract specs. Confirm tick values and E-nano availability with your broker.</p>
+
+  <script>
+    const TIERS = {
+      micro: {
+        label: 'Micro',
+        instruments: {
+          MNQ: { name: 'Micro Nasdaq-100', exchange: 'CME',   tickSize: 0.25, tickValue: 0.50 },
+          MES: { name: 'Micro S&P 500',    exchange: 'CME',   tickSize: 0.25, tickValue: 1.25 },
+          MGC: { name: 'Micro Gold',       exchange: 'COMEX', tickSize: 0.10, tickValue: 1.00 },
+          MYM: { name: 'Micro Dow',        exchange: 'CBOT',  tickSize: 1.00, tickValue: 0.50 },
+        }
+      },
+      emini: {
+        label: 'E-mini',
+        instruments: {
+          NQ: { name: 'E-mini Nasdaq-100', exchange: 'CME',   tickSize: 0.25, tickValue: 5.00 },
+          ES: { name: 'E-mini S&P 500',    exchange: 'CME',   tickSize: 0.25, tickValue: 12.50 },
+          GC: { name: 'Gold',              exchange: 'COMEX', tickSize: 0.10, tickValue: 10.00 },
+          YM: { name: 'E-mini Dow',        exchange: 'CBOT',  tickSize: 1.00, tickValue: 5.00 },
+        }
+      },
+      enano: {
+        label: 'E-nano',
+        instruments: {
+          NNQ:  { name: 'E-nano Nasdaq-100', exchange: 'CME',  tickSize: 0.50, tickValue: 0.10 },
+          NES:  { name: 'E-nano S&P 500',    exchange: 'CME',  tickSize: 0.50, tickValue: 0.25 },
+          NDOW: { name: 'E-nano Dow',        exchange: 'CBOT', tickSize: 2.00, tickValue: 0.10 },
+        }
+      }
+    };
+
+    const state = {
+      tier: 'micro',
+      instrument: 'MNQ',
+      contracts: 1,
+      rrSelected: null,
+      posSizeOpen: false,
+    };
+
+    function getSpec(instrument) {
+      return TIERS[state.tier].instruments[instrument];
+    }
+    function pointValue(instrument) {
+      const spec = getSpec(instrument);
+      return spec.tickValue / spec.tickSize;
+    }
+    function trimNum(n) {
+      return parseFloat(n.toFixed(4)).toString();
+    }
+
+    function renderInstrumentButtons() {
+      const row = document.getElementById('instrument-row');
+      const tickers = Object.keys(TIERS[state.tier].instruments);
+      row.innerHTML = tickers.map(t =>
+        '<button class="pill-btn' + (t === state.instrument ? ' active' : '') +
+        '" id="inst-' + t + '" onclick="setInstrument(\'' + t + '\')">' + t + '</button>'
+      ).join('');
+    }
+
+    function setTier(tier) {
+      state.tier = tier;
+      ['micro', 'emini', 'enano'].forEach(t => {
+        document.getElementById('tier-' + t).classList.toggle('active', t === tier);
+      });
+      state.instrument = Object.keys(TIERS[tier].instruments)[0];
+      renderInstrumentButtons();
+      renderStopTarget();
+      renderSize();
+    }
+
+    function setInstrument(instrument) {
+      state.instrument = instrument;
+      Object.keys(TIERS[state.tier].instruments).forEach(i => {
+        const btn = document.getElementById('inst-' + i);
+        if (btn) btn.classList.toggle('active', i === instrument);
+      });
+      renderStopTarget();
+      renderSize();
+    }
+
+    function stepContracts(delta) {
+      const input = document.getElementById('contracts');
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      val = Math.max(1, val + delta);
+      input.value = val;
+      onContractsChange();
+    }
+    function onContractsChange() {
+      const input = document.getElementById('contracts');
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      state.contracts = val;
+      renderStopTarget();
+    }
+
+    function setRRPoints(multiplier) {
+      const slEl = document.getElementById('sl-points');
+      const tpEl = document.getElementById('tp-points');
+      const slPoints = parseFloat(slEl.value);
+      if (isNaN(slPoints)) return;
+      tpEl.value = trimNum(slPoints * multiplier);
+      [1, 2, 3, 4].forEach(m => {
+        document.getElementById('rr-' + m).classList.toggle('active', m === multiplier);
+      });
+      state.rrSelected = multiplier;
+      renderStopTarget();
+    }
+    function clearRRSelection() {
+      [1, 2, 3, 4].forEach(m => {
+        document.getElementById('rr-' + m).classList.remove('active');
+      });
+      state.rrSelected = null;
+    }
+
+    function togglePositionSize() {
+      const panel = document.getElementById('panel-size');
+      const toggle = document.querySelector('.collapse-toggle');
+      state.posSizeOpen = panel.style.display === 'none';
+      panel.style.display = state.posSizeOpen ? '' : 'none';
+      toggle.classList.toggle('open', state.posSizeOpen);
+      saveState();
+    }
+
+    function renderStopTarget() {
+      const slEl = document.getElementById('sl-points');
+      const tpEl = document.getElementById('tp-points');
+      const slSubEl = document.getElementById('sl-sub');
+      const tpSubEl = document.getElementById('tp-sub');
+      const slDollarEl = document.getElementById('sl-dollar');
+      const tpDollarEl = document.getElementById('tp-dollar');
+      saveState();
+
+      const spec = getSpec(state.instrument);
+      const pv = pointValue(state.instrument);
+      const ticksPerPoint = 1 / spec.tickSize;
+
+      const slPoints = parseFloat(slEl.value);
+      if (isNaN(slPoints)) {
+        slSubEl.textContent = '— pts · — ticks';
+        slDollarEl.textContent = '$0.00';
+      } else {
+        const ticks = slPoints * ticksPerPoint;
+        const dollars = slPoints * pv * state.contracts;
+        slSubEl.textContent = trimNum(slPoints) + ' pts \u00b7 ' + trimNum(ticks) + ' ticks';
+        slDollarEl.textContent = '$' + dollars.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      const tpPoints = parseFloat(tpEl.value);
+      if (isNaN(tpPoints)) {
+        tpSubEl.textContent = '— pts · — ticks';
+        tpDollarEl.textContent = '$0.00';
+      } else {
+        const ticks = tpPoints * ticksPerPoint;
+        const dollars = tpPoints * pv * state.contracts;
+        tpSubEl.textContent = trimNum(tpPoints) + ' pts \u00b7 ' + trimNum(ticks) + ' ticks';
+        tpDollarEl.textContent = '$' + dollars.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    }
+
+    function renderSize() {
+      const accountEl = document.getElementById('account-size');
+      const maxDdEl = document.getElementById('max-dd');
+      const bufferEl = document.getElementById('buffer-line');
+      const riskPctEl = document.getElementById('risk-pct');
+      const stopTicksEl = document.getElementById('stop-ticks');
+      const maxRiskEl = document.getElementById('size-maxrisk');
+      const contractsEl = document.getElementById('size-contracts');
+      const actualRiskEl = document.getElementById('size-actualrisk');
+      saveState();
+
+      const account = parseFloat(accountEl.value);
+      const maxDd = parseFloat(maxDdEl.value);
+      const riskPct = parseFloat(riskPctEl.value);
+      const stopTicks = parseFloat(stopTicksEl.value);
+      const spec = getSpec(state.instrument);
+
+      let buffer = null;
+      if (!isNaN(account)) {
+        buffer = isNaN(maxDd) ? account : account - maxDd;
+        bufferEl.textContent = isNaN(maxDd) ? '' : 'Buffer: $' + buffer.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } else {
+        bufferEl.textContent = '';
+      }
+
+      if (buffer === null || isNaN(riskPct)) {
+        maxRiskEl.textContent = '—';
+        contractsEl.textContent = '—';
+        actualRiskEl.textContent = '—';
+        return;
+      }
+
+      const maxRisk = buffer * (riskPct / 100);
+      maxRiskEl.textContent = '$' + maxRisk.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      if (isNaN(stopTicks) || stopTicks <= 0) {
+        contractsEl.textContent = '—';
+        actualRiskEl.textContent = '—';
+        return;
+      }
+
+      const riskPerContract = stopTicks * spec.tickValue;
+      const suggested = Math.floor(maxRisk / riskPerContract);
+      contractsEl.textContent = suggested;
+      const actualRisk = suggested * riskPerContract;
+      actualRiskEl.textContent = '$' + actualRisk.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function clearAll() {
+      state.tier = 'micro';
+      state.instrument = 'MNQ';
+      state.contracts = 1;
+      state.rrSelected = null;
+      state.posSizeOpen = false;
+
+      ['sl-points', 'tp-points', 'account-size', 'max-dd', 'risk-pct', 'stop-ticks'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('contracts').value = 1;
+
+      ['micro', 'emini', 'enano'].forEach(t => {
+        document.getElementById('tier-' + t).classList.toggle('active', t === 'micro');
+      });
+      renderInstrumentButtons();
+      clearRRSelection();
+
+      const panel = document.getElementById('panel-size');
+      const toggle = document.querySelector('.collapse-toggle');
+      panel.style.display = 'none';
+      toggle.classList.remove('open');
+
+      renderStopTarget();
+      renderSize();
+      safeSet('unicorn_calc_v1', JSON.stringify({ tier: 'micro', instrument: 'MNQ', contracts: 1 }));
+    }
+
+    function safeSet(key, value) {
+      try { localStorage.setItem(key, value); } catch (e) { console.warn('Could not save state:', e); }
+    }
+
+    function saveState() {
+      const payload = {
+        tier: state.tier,
+        instrument: state.instrument,
+        contracts: state.contracts,
+        rrSelected: state.rrSelected,
+        slPoints: document.getElementById('sl-points').value,
+        tpPoints: document.getElementById('tp-points').value,
+        posSizeOpen: state.posSizeOpen,
+        accountSize: document.getElementById('account-size').value,
+        maxDd: document.getElementById('max-dd').value,
+        riskPct: document.getElementById('risk-pct').value,
+        stopTicks: document.getElementById('stop-ticks').value,
+      };
+      safeSet('unicorn_calc_v1', JSON.stringify(payload));
+    }
+
+    function loadState() {
+      let saved = null;
+      try {
+        const raw = localStorage.getItem('unicorn_calc_v1');
+        if (raw) saved = JSON.parse(raw);
+      } catch (e) {
+        console.warn('Could not load state:', e);
+      }
+      if (!saved) {
+        renderStopTarget();
+        return;
+      }
+
+      state.tier = saved.tier || 'micro';
+      const tierInstruments = Object.keys(TIERS[state.tier].instruments);
+      state.instrument = (saved.instrument && tierInstruments.includes(saved.instrument))
+        ? saved.instrument
+        : tierInstruments[0];
+      state.contracts = saved.contracts || 1;
+      state.rrSelected = saved.rrSelected || null;
+      state.posSizeOpen = !!saved.posSizeOpen;
+
+      ['micro', 'emini', 'enano'].forEach(t => {
+        document.getElementById('tier-' + t).classList.toggle('active', t === state.tier);
+      });
+      renderInstrumentButtons();
+
+      document.getElementById('contracts').value = state.contracts;
+      document.getElementById('sl-points').value = saved.slPoints || '';
+      document.getElementById('tp-points').value = saved.tpPoints || '';
+      if (state.rrSelected) {
+        document.getElementById('rr-' + state.rrSelected).classList.add('active');
+      }
+      document.getElementById('account-size').value = saved.accountSize || '';
+      document.getElementById('max-dd').value = saved.maxDd || '';
+      document.getElementById('risk-pct').value = saved.riskPct || '';
+      document.getElementById('stop-ticks').value = saved.stopTicks || '';
+
+      const panel = document.getElementById('panel-size');
+      const toggle = document.querySelector('.collapse-toggle');
+      panel.style.display = state.posSizeOpen ? '' : 'none';
+      toggle.classList.toggle('open', state.posSizeOpen);
+
+      renderStopTarget();
+      renderSize();
+    }
+
+    function init() {
+      renderInstrumentButtons();
+      loadState();
+    }
+    init();
+  </script>
+</body>
+</html>
