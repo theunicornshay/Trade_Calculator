@@ -1,688 +1,612 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" href="icon.png">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Unicorn Calc" />
-  <title>Unicorn Trade Calculator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:            #FAF7FF;
-      --card-bg:       #FFFFFF;
-      --card-border:   #E4DBFA;
-      --text-primary:  #2B2340;
-      --subtext:       #7A6F94;
-      --accent:        #3C3489;
-      --accent-deep:   #26215C;
-      --purple-fill:   #AFA9EC;
-      --purple-fill-lt:#EEEDFE;
-      --pink-fill:     #ED93B1;
-      --pink-fill-lt:  #FBEAF0;
-      --check-border:  #D6CCF0;
-      --font-display:  'Baloo 2', sans-serif;
-      --font-body:     'Inter', sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131722">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trade Calculator">
+<title>Trade Calculator</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23131722'/%3E%3Crect x='22' y='16' width='56' height='36' rx='4' fill='%2326A69A'/%3E%3Crect x='22' y='56' width='56' height='26' rx='4' fill='%23EF5350'/%3E%3Cline x1='14' y1='54' x2='86' y2='54' stroke='%23F0F3FA' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAE/0lEQVR4nOzdWWtcdRjH8We2zGTmJN2dkDS1qdo2Uk0jtAQRUWpBpUIIgkjJtXe+ALHV3nnjpa9AXBAs8a4YXK6K0EimGkhLtVHS1ElqXdLJ1tk8VQst+AtjTuCZkO/nDQSe//esE84/uSO/z4D/kjRAIA5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGpieJI7O6IZVpsc6sv365eK1pz8I+j5dAjrc8/lezKG+6qzMwujp4vX7xsrhLZYJt5SSZyg8/lBo/F2wPDPcKBpA/3xrKZ8pWfrV43J55xBCdfygz0GYTUg53xrW3liSvmJG5OWvp70088alhV5ujjqYNuH1BxiyP9ZL+hAZljA+bEJ45YJp3a22loQHhxCW/OzINPHKmH98SSvGJpSCyVTO7tMg9OZ462nKFhiZ0+Dw0cvpCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIA5JPHJWZOUPDKtdvmAefPd6qxRv1mttGyxtLOKjqLz7HktO+srfLy98UDA24M6hyxTy4bTq8+NmX1T9uGVYVjigclDlxiyM8eSx++rlhVQufnAsHZU5iO/JuW6Xf+fO51uCVF1oe22+43/LYxOLIF/WFJfOzPnH09Ow9euRIviNva5NKJNqDWJCLpTb7o3W9XKmVFmrzJStXbU2KxeKFC2NTUz9ZZOuwGMPDJ99+65ShmZw+feaDDz+yaKKeObq7u7/+atTQfJ559vj09LRFEPWG9OCBA4amFH1pol5WunZ3GZpS9KWJGsd4YdzQlKIvTdTLysXCd2Nj3xqazPh4IVwai2YdHmWDIBgaGuzr6+tY86Ps33KJeCIWs82tWq8vVGsWwezsXKFQOHt2pFQqWTTOL8FCx7e3v74n3xu0Gu6aLC29Nz177ua8uUpkg23mJB2zU/s639jXuaslZbhHOJAXd23dmoif/3Mh0mkkGs843t3f/XLHDoPQ157rTKdGf3M7f7j98HZi55YTD7h1uVEM5bc/va3NnLjF8SrnjMa81rXLnPjE0ZaIH27PGhoQDqrF6SHOJ46BLUE67vevJBtKOKh+pwPJZ4V2bvqf5v+XnkzaPLBIkIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigOQTx6TrHjMbziWncfl82efy4nKtzu6QDQkHNbm4bB584liq1T8u3jQ0IBzUitM2q25fbXtnqlhccdvabqMIRxQOypz4bR1aq535ccawqjd/uBYOypx4ft766tLK+9d/7WlNP5TNGO43Mvf78PdXLzndbfzDf9eEUHsifijIHsim25Kb/dH6VqUS3q1PlJbmq45fxP9XU8SB5sRLMEjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHJOKARByQiAPSXwAAAP//fi89hAAAAAZJREFUAwBaHP1QzZcQuAAAAABJRU5ErkJggg==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#131722;
+    --card:#1E222D;
+    --field:#171B26;
+    --line:#2A2E39;
+    --line-2:#363A45;
+    --ink:#D1D4DC;
+    --ink-hi:#F0F3FA;
+    --soft:#787B86;
+    --green:#26A69A;
+    --red:#EF5350;
+    --blue:#2962FF;
+    --gray:#5D606B;
+    --radius:14px;
+    --radius-sm:10px;
+    color-scheme:dark;
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:calc(env(safe-area-inset-bottom,0px) + 32px);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px;}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  header.top{display:flex;align-items:center;gap:10px;padding:22px 0 16px;}
+  header.top svg{width:30px;height:30px;flex:none;}
+  header.top h1{font-size:22px;font-weight:700;margin:0;color:var(--ink-hi);letter-spacing:-0.01em;}
 
-    body {
-      background: var(--bg);
-      font-family: var(--font-body);
-      color: var(--text-primary);
-      padding: 0 0 40px;
-      -webkit-text-size-adjust: 100%;
-    }
+  .tabs{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:16px;}
+  .tabs button{flex:1;appearance:none;border:none;background:transparent;color:var(--soft);font:600 14px 'Inter',sans-serif;padding:9px 10px;border-radius:999px;cursor:pointer;}
+  .tabs button.active{background:var(--line-2);color:var(--ink-hi);}
 
-    .header {
-      text-align: center;
-      padding: 32px 20px 20px;
-    }
-    .header h1 {
-      font-family: var(--font-display);
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--accent-deep);
-      letter-spacing: -0.01em;
-    }
-    .header .sparkle { font-size: 22px; vertical-align: -2px; }
-    .header p {
-      font-size: 12.5px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--subtext);
-      margin-top: 4px;
-    }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+  .card h2{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin:0 0 14px;}
 
-    .card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 20px;
-      margin: 0 16px;
-      padding: 20px 18px 22px;
-      box-shadow: 0 4px 18px rgba(60, 52, 137, 0.08);
-    }
+  .field{margin-bottom:12px;}
+  .field:last-child{margin-bottom:0;}
+  label{display:block;font-size:12px;font-weight:600;color:var(--soft);margin-bottom:6px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .row2>div{min-width:0;}
 
-    .row-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--subtext);
-      margin: 14px 0 6px;
-    }
-    .row-label:first-child { margin-top: 0; }
+  input[type=number],select{
+    width:100%;min-width:0;
+    font:16px 'Inter',sans-serif;
+    padding:11px 12px;
+    border-radius:var(--radius-sm);
+    border:1px solid var(--line);
+    background:var(--field);
+    color:var(--ink-hi);
+    -webkit-appearance:none;appearance:none;
+  }
+  input::placeholder{color:var(--gray);}
+  input:focus,select:focus{outline:2px solid var(--blue);outline-offset:0;border-color:transparent;}
+  select{
+    font-weight:600;padding-right:34px;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23787B86' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 11px center;background-size:16px;
+  }
 
-    .btn-row {
-      display: flex;
-      gap: 6px;
-    }
-    .pill-btn {
-      flex: 1;
-      background: none;
-      border: 1.5px solid var(--check-border);
-      color: var(--text-primary);
-      border-radius: 99px;
-      padding: 9px 0;
-      font-family: var(--font-body);
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.18s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .pill-btn.active {
-      background: var(--purple-fill);
-      border-color: var(--accent);
-      color: var(--accent-deep);
-    }
-    .pill-btn.small { font-size: 12px; padding: 7px 0; }
+  .toggle{display:flex;gap:8px;}
+  .toggle button{
+    flex:1;padding:11px 6px;border-radius:var(--radius-sm);
+    border:1px solid var(--line);background:var(--field);
+    font:600 14px 'Inter',sans-serif;color:var(--soft);cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .toggle.sm button{padding:8px 4px;font-size:13px;}
+  .toggle button.active{background:rgba(41,98,255,.18);border-color:var(--blue);color:var(--ink-hi);}
+  .toggle button.active.g{background:var(--green);border-color:var(--green);color:#fff;}
+  .toggle button.active.r{background:var(--red);border-color:var(--red);color:#fff;}
 
-    .stepper {
-      display: flex;
-      align-items: stretch;
-      gap: 8px;
-    }
-    .stepper-btn {
-      width: 42px;
-      flex-shrink: 0;
-      background: var(--accent);
-      border: none;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .stepper-input {
-      flex: 1;
-      text-align: center;
-      border: 1.5px solid var(--check-border);
-      border-radius: 12px;
-      font-family: var(--font-body);
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text-primary);
-      background: var(--card-bg);
-    }
+  .pills{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px;}
+  .pills button{
+    padding:10px 4px;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--field);
+    font:700 14px 'Inter',sans-serif;color:var(--soft);cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  .pills button.active{background:rgba(41,98,255,.18);border-color:var(--blue);color:var(--ink-hi);}
 
-    .input {
-      width: 100%;
-      border: 1.5px solid var(--check-border);
-      border-radius: 12px;
-      padding: 11px 13px;
-      font-family: var(--font-body);
-      font-size: 16px;
-      color: var(--text-primary);
-      background: var(--card-bg);
-    }
-    .input:focus { outline: none; border-color: var(--accent); }
+  .selrow{display:flex;gap:8px;}
+  .selrow select{flex:1;}
+  .star{
+    flex:none;width:46px;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--field);
+    color:var(--soft);font-size:20px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  .star.on{color:#F5B83D;border-color:rgba(245,184,61,.5);}
 
-    .st-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
+  .stepper{display:flex;gap:6px;}
+  .stepper button{
+    flex:none;width:40px;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--line-2);
+    color:var(--ink-hi);font:700 18px 'Inter',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  .stepper input{text-align:center;font-weight:700;padding-left:4px;padding-right:4px;}
 
-    .st-box {
-      border-radius: 14px;
-      padding: 14px 15px;
-    }
-    .st-box.purple { background: var(--purple-fill-lt); }
-    .st-box.pink   { background: var(--pink-fill-lt); }
-    .st-box .tag {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    .st-box.purple .tag { color: var(--accent-deep); }
-    .st-box.pink .tag   { color: #8A2C4C; }
-    .st-box .sub {
-      font-size: 12px;
-      color: var(--subtext);
-      margin: 3px 0 4px;
-    }
-    .st-box .dollar {
-      font-family: var(--font-display);
-      font-size: 23px;
-      font-weight: 700;
-    }
-    .st-box.purple .dollar { color: var(--accent-deep); }
-    .st-box.pink .dollar   { color: #8A2C4C; }
+  .box{border-radius:var(--radius);padding:14px;border:1px solid;}
+  .box.red{background:rgba(239,83,80,.10);border-color:rgba(239,83,80,.35);}
+  .box.green{background:rgba(38,166,154,.10);border-color:rgba(38,166,154,.35);}
+  .box .bk{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;}
+  .box.red .bk,.box.red .bamt{color:var(--red);}
+  .box.green .bk,.box.green .bamt{color:var(--green);}
+  .box .bp{font-size:14px;font-weight:700;color:var(--ink-hi);margin-top:6px;font-variant-numeric:tabular-nums;}
+  .box .bpts{font-size:12px;color:var(--soft);margin-top:4px;}
+  .box .bamt{font-size:22px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums;}
+  .box .bnote{font-size:11px;color:var(--soft);margin-top:2px;min-height:14px;}
+  .res{margin-bottom:10px;}
+  .rrline{text-align:center;font-size:13px;font-weight:600;color:var(--ink);min-height:18px;margin-bottom:14px;}
 
-    .collapse-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      width: 100%;
-      background: none;
-      border: none;
-      font-family: var(--font-body);
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--subtext);
-      padding: 10px 0 4px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .collapse-toggle svg {
-      width: 14px;
-      height: 14px;
-      transition: transform 0.2s;
-    }
-    .collapse-toggle.open svg { transform: rotate(180deg); }
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .stat{background:var(--field);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 4px;text-align:center;min-width:0;}
+  .stat .n{font-size:17px;font-weight:700;color:var(--ink-hi);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stat .l{font-size:11px;color:var(--soft);margin-top:3px;}
+  .stat.hl{border-color:var(--blue);}
 
-    .buffer-line {
-      text-align: center;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent-deep);
-      margin: 2px 0 10px;
-      min-height: 16px;
-    }
-    .hint {
-      font-size: 11px;
-      color: var(--subtext);
-      margin-top: -3px;
-      margin-bottom: 10px;
-    }
+  .warn{background:rgba(239,83,80,.12);border:1px solid rgba(239,83,80,.4);color:var(--ink-hi);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:13px;font-weight:600;line-height:1.4;}
 
-    .result-grid {
-      display: flex;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .result-box {
-      flex: 1;
-      text-align: center;
-      border-radius: 12px;
-      padding: 11px 6px;
-    }
-    .result-box.c1 { background: var(--purple-fill-lt); }
-    .result-box.c2 { background: var(--pink-fill-lt); }
-    .result-box.c3 { background: #FFF3E0; }
-    .result-tag {
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      opacity: 0.75;
-      margin-bottom: 3px;
-    }
-    .result-box.c1 .result-tag { color: var(--accent-deep); }
-    .result-box.c2 .result-tag { color: #8A2C4C; }
-    .result-box.c3 .result-tag { color: #96560C; }
-    .result-value {
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 700;
-    }
-    .result-box.c1 .result-value { color: var(--accent-deep); }
-    .result-box.c2 .result-value { color: #8A2C4C; }
-    .result-box.c3 .result-value { color: #96560C; }
+  .btn{
+    appearance:none;border:none;cursor:pointer;width:100%;
+    font:700 15px 'Inter',sans-serif;padding:14px;border-radius:12px;
+    background:var(--blue);color:#fff;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn.ghost{background:transparent;border:1px solid var(--line-2);color:var(--ink);}
 
-    .clear-btn {
-      display: block;
-      width: 100%;
-      margin-top: 18px;
-      background: none;
-      border: 1.5px solid var(--check-border);
-      color: var(--subtext);
-      border-radius: 99px;
-      padding: 10px 0;
-      font-family: var(--font-body);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .clear-btn:active { background: var(--purple-fill-lt); }
-
-    .footer-note {
-      text-align: center;
-      font-size: 11px;
-      color: var(--subtext);
-      margin: 18px 20px 0;
-      line-height: 1.6;
-    }
-  </style>
+  .muted{font-size:12px;color:var(--soft);margin-top:8px;line-height:1.4;}
+  .muted:empty{display:none;}
+  .foot{text-align:center;font-size:11px;color:var(--gray);margin:16px 8px 0;line-height:1.5;}
+  [hidden]{display:none!important;}
+</style>
 </head>
 <body>
+<div class="wrap">
 
-  <div class="header">
-    <h1><span class="sparkle">🦄</span> Unicorn Trade Calculator</h1>
-    <p>Stop &middot; Target &middot; Position Size</p>
+  <header class="top">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect width="100" height="100" rx="22" fill="#1E222D"/>
+      <rect x="22" y="16" width="56" height="36" rx="4" fill="#26A69A"/>
+      <rect x="22" y="56" width="56" height="26" rx="4" fill="#EF5350"/>
+      <line x1="14" y1="54" x2="86" y2="54" stroke="#F0F3FA" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <h1>Trade Calculator</h1>
+  </header>
+
+  <div class="tabs">
+    <button type="button" class="active" data-tab="st">Stop &amp; target</button>
+    <button type="button" data-tab="ps">Position size</button>
   </div>
 
+  <!-- ============ CONTRACT (shared) ============ -->
   <div class="card">
-
-    <div class="row-label">Contract Size</div>
-    <div class="btn-row" id="tier-row">
-      <button class="pill-btn" id="tier-emini" onclick="setTier('emini')">E-mini</button>
-      <button class="pill-btn active" id="tier-micro" onclick="setTier('micro')">Micro</button>
-      <button class="pill-btn" id="tier-enano" onclick="setTier('enano')">E-nano</button>
-    </div>
-
-    <div class="row-label">Instrument</div>
-    <div class="btn-row" id="instrument-row"></div>
-
-    <div class="row-label">Number of Contracts</div>
-    <div class="stepper">
-      <button class="stepper-btn" onclick="stepContracts(-1)">&minus;</button>
-      <input type="number" inputmode="numeric" class="stepper-input" id="contracts" value="1" min="1" oninput="onContractsChange()">
-      <button class="stepper-btn" onclick="stepContracts(1)">+</button>
-    </div>
-
-    <div class="st-row" style="margin-top:14px;">
-      <div>
-        <div class="row-label">Stop Loss (Points)</div>
-        <input type="number" inputmode="decimal" class="input" id="sl-points" placeholder="e.g. 30" oninput="clearRRSelection(); renderStopTarget();">
-      </div>
-      <div>
-        <div class="row-label">Take Profit (Points)</div>
-        <input type="number" inputmode="decimal" class="input" id="tp-points" placeholder="e.g. 60" oninput="clearRRSelection(); renderStopTarget();">
+    <h2>Contract</h2>
+    <div class="field">
+      <div class="toggle" id="tier">
+        <button type="button" data-v="emini">E-mini / Full</button>
+        <button type="button" data-v="micro">Micro</button>
+        <button type="button" data-v="enano">E-nano</button>
       </div>
     </div>
-
-    <div class="btn-row" style="margin-bottom:14px;">
-      <button class="pill-btn small" id="rr-1" onclick="setRRPoints(1)">1:1</button>
-      <button class="pill-btn small" id="rr-2" onclick="setRRPoints(2)">1:2</button>
-      <button class="pill-btn small" id="rr-3" onclick="setRRPoints(3)">1:3</button>
-      <button class="pill-btn small" id="rr-4" onclick="setRRPoints(4)">1:4</button>
-    </div>
-
-    <div class="st-row">
-      <div class="st-box purple">
-        <div class="tag">Stop Loss</div>
-        <div class="sub" id="sl-sub">— pts · — ticks</div>
-        <div class="dollar" id="sl-dollar">$0.00</div>
+    <div class="field">
+      <label>Instrument</label>
+      <div class="pills" id="favs"></div>
+      <div class="selrow">
+        <select id="instrSel" aria-label="All instruments"></select>
+        <button type="button" class="star" id="star" aria-label="Add to favorites">☆</button>
       </div>
-      <div class="st-box pink">
-        <div class="tag">Take Profit</div>
-        <div class="sub" id="tp-sub">— pts · — ticks</div>
-        <div class="dollar" id="tp-dollar">$0.00</div>
-      </div>
+      <div class="muted" id="specLine"></div>
     </div>
-
-    <button class="collapse-toggle" onclick="togglePositionSize()">
-      Need to size a position instead?
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-    </button>
-
-    <div id="panel-size" style="display:none;">
-      <div class="row-label">Account Size</div>
-      <input type="number" inputmode="decimal" class="input" id="account-size" placeholder="e.g. 50000" oninput="renderSize()">
-      <div class="row-label">Max Drawdown (optional, for prop accounts)</div>
-      <input type="number" inputmode="decimal" class="input" id="max-dd" placeholder="e.g. 2000" oninput="renderSize()">
-      <div class="buffer-line" id="buffer-line"></div>
-
-      <div class="row-label">Risk Per Trade (%)</div>
-      <input type="number" inputmode="decimal" class="input" id="risk-pct" placeholder="e.g. 1" oninput="renderSize()">
-      <div class="row-label">Stop Distance (Ticks)</div>
-      <input type="number" inputmode="decimal" class="input" id="stop-ticks" placeholder="e.g. 10" oninput="renderSize()">
-
-      <div class="result-grid">
-        <div class="result-box c3">
-          <div class="result-tag">Max $ Risk</div>
-          <div class="result-value" id="size-maxrisk">—</div>
-        </div>
-        <div class="result-box c1">
-          <div class="result-tag">Contracts</div>
-          <div class="result-value" id="size-contracts">—</div>
-        </div>
-        <div class="result-box c2">
-          <div class="result-tag">Actual $ Risk</div>
-          <div class="result-value" id="size-actualrisk">—</div>
-        </div>
-      </div>
+    <div class="field">
+      <label for="fee">Fees per contract, round trip ($)</label>
+      <input type="number" step="any" inputmode="decimal" id="fee" placeholder="Optional, e.g. 1.24">
     </div>
-
-    <button class="clear-btn" onclick="clearAll()">Clear Calculator</button>
-
   </div>
 
-  <p class="footer-note">Estimates based on standard contract specs. Confirm tick values and E-nano availability with your broker.</p>
+  <!-- ============ STOP & TARGET ============ -->
+  <section id="tab-st">
+    <div class="card">
+      <h2>Trade</h2>
+      <div class="field">
+        <label>Direction</label>
+        <div class="toggle" id="dir">
+          <button type="button" class="g" data-v="long">Long</button>
+          <button type="button" class="r" data-v="short">Short</button>
+        </div>
+      </div>
+      <div class="row2 field">
+        <div>
+          <label for="entry">Entry price</label>
+          <input type="number" step="any" inputmode="decimal" id="entry" placeholder="Optional">
+        </div>
+        <div>
+          <label for="contracts">Contracts</label>
+          <div class="stepper">
+            <button type="button" data-step="-1" aria-label="Fewer contracts">−</button>
+            <input type="number" inputmode="numeric" min="1" id="contracts" value="1">
+            <button type="button" data-step="1" aria-label="More contracts">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="row2 field">
+        <div>
+          <label for="sl">Stop loss (points)</label>
+          <input type="number" step="any" inputmode="decimal" id="sl" placeholder="e.g. 30">
+        </div>
+        <div>
+          <label for="tp">Take profit (points)</label>
+          <input type="number" step="any" inputmode="decimal" id="tp" placeholder="e.g. 60">
+        </div>
+      </div>
+      <div class="field">
+        <div class="toggle sm" id="rr">
+          <button type="button" data-v="1">1:1</button>
+          <button type="button" data-v="2">1:2</button>
+          <button type="button" data-v="3">1:3</button>
+          <button type="button" data-v="4">1:4</button>
+        </div>
+        <div class="muted" id="dirHint"></div>
+      </div>
+    </div>
 
-  <script>
-    const TIERS = {
-      micro: {
-        label: 'Micro',
-        instruments: {
-          MNQ: { name: 'Micro Nasdaq-100', exchange: 'CME',   tickSize: 0.25, tickValue: 0.50 },
-          MES: { name: 'Micro S&P 500',    exchange: 'CME',   tickSize: 0.25, tickValue: 1.25 },
-          MGC: { name: 'Micro Gold',       exchange: 'COMEX', tickSize: 0.10, tickValue: 1.00 },
-          MYM: { name: 'Micro Dow',        exchange: 'CBOT',  tickSize: 1.00, tickValue: 0.50 },
-        }
-      },
-      emini: {
-        label: 'E-mini',
-        instruments: {
-          NQ: { name: 'E-mini Nasdaq-100', exchange: 'CME',   tickSize: 0.25, tickValue: 5.00 },
-          ES: { name: 'E-mini S&P 500',    exchange: 'CME',   tickSize: 0.25, tickValue: 12.50 },
-          GC: { name: 'Gold',              exchange: 'COMEX', tickSize: 0.10, tickValue: 10.00 },
-          YM: { name: 'E-mini Dow',        exchange: 'CBOT',  tickSize: 1.00, tickValue: 5.00 },
-        }
-      },
-      enano: {
-        label: 'E-nano',
-        instruments: {
-          NNQ:  { name: 'E-nano Nasdaq-100', exchange: 'CME',  tickSize: 0.50, tickValue: 0.10 },
-          NES:  { name: 'E-nano S&P 500',    exchange: 'CME',  tickSize: 0.50, tickValue: 0.25 },
-          NDOW: { name: 'E-nano Dow',        exchange: 'CBOT', tickSize: 2.00, tickValue: 0.10 },
-        }
+    <div class="row2 res">
+      <div class="box red">
+        <div class="bk">Stop loss</div>
+        <div class="bp" id="stPrice" hidden></div>
+        <div class="bpts" id="stPts">— pts · — ticks</div>
+        <div class="bamt" id="stAmt">$0.00</div>
+        <div class="bnote" id="stNote"></div>
+      </div>
+      <div class="box green">
+        <div class="bk">Take profit</div>
+        <div class="bp" id="tpPrice" hidden></div>
+        <div class="bpts" id="tpPts">— pts · — ticks</div>
+        <div class="bamt" id="tpAmt">$0.00</div>
+        <div class="bnote" id="tpNote"></div>
+      </div>
+    </div>
+    <div class="rrline" id="rrLine"></div>
+  </section>
+
+  <!-- ============ POSITION SIZE ============ -->
+  <section id="tab-ps" hidden>
+    <div class="card">
+      <h2>Account</h2>
+      <div class="row2 field">
+        <div>
+          <label for="acct">Account size ($)</label>
+          <input type="number" step="any" inputmode="decimal" id="acct" placeholder="e.g. 50000">
+        </div>
+        <div>
+          <label for="dd">Max drawdown ($)</label>
+          <input type="number" step="any" inputmode="decimal" id="dd" placeholder="Prop only">
+        </div>
+      </div>
+      <div class="row2 field">
+        <div>
+          <label for="riskPct" id="riskLabel">Risk % of account</label>
+          <input type="number" step="any" inputmode="decimal" id="riskPct" placeholder="e.g. 1">
+        </div>
+        <div>
+          <label for="sl2">Stop loss (points)</label>
+          <input type="number" step="any" inputmode="decimal" id="sl2" placeholder="e.g. 30">
+        </div>
+      </div>
+      <div class="muted" id="basisLine"></div>
+    </div>
+
+    <div class="card">
+      <h2>Position</h2>
+      <div class="stats">
+        <div class="stat"><div class="n" id="sMax">—</div><div class="l">Max risk</div></div>
+        <div class="stat hl"><div class="n" id="sCon">—</div><div class="l">Contracts</div></div>
+        <div class="stat"><div class="n" id="sAct">—</div><div class="l">Actual risk</div></div>
+      </div>
+      <div class="muted" id="psDetail"></div>
+      <div class="warn" id="psWarn" hidden></div>
+      <button type="button" class="btn" id="btnApply" hidden style="margin-top:12px;">Use contracts</button>
+    </div>
+  </section>
+
+  <button type="button" class="btn ghost" id="btnClear">Clear trade</button>
+  <p class="foot">Estimates based on standard contract specs. Confirm tick values and fees with your broker.</p>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+
+  /* ---------- contract specs (ts = tick size in points, tv = $ per tick) ---------- */
+  const INSTR = {
+    micro: [
+      {t:'MNQ', n:'Micro Nasdaq-100',       g:'Indexes',    ts:0.25,   tv:0.50},
+      {t:'MES', n:'Micro S&P 500',          g:'Indexes',    ts:0.25,   tv:1.25},
+      {t:'MYM', n:'Micro Dow',              g:'Indexes',    ts:1,      tv:0.50},
+      {t:'M2K', n:'Micro Russell 2000',     g:'Indexes',    ts:0.10,   tv:0.50},
+      {t:'MGC', n:'Micro Gold',             g:'Metals',     ts:0.10,   tv:1.00},
+      {t:'SIL', n:'Micro Silver',           g:'Metals',     ts:0.005,  tv:5.00},
+      {t:'MHG', n:'Micro Copper',           g:'Metals',     ts:0.0005, tv:1.25},
+      {t:'MCL', n:'Micro Crude Oil',        g:'Energy',     ts:0.01,   tv:1.00},
+      {t:'MNG', n:'Micro Natural Gas',      g:'Energy',     ts:0.001,  tv:1.00},
+      {t:'M6E', n:'Micro Euro',             g:'Currencies', ts:0.0001, tv:1.25},
+      {t:'M6B', n:'Micro British Pound',    g:'Currencies', ts:0.0001, tv:0.625},
+      {t:'M6A', n:'Micro Australian Dollar',g:'Currencies', ts:0.0001, tv:1.00},
+      {t:'MJY', n:'Micro Japanese Yen',     g:'Currencies', ts:0.000001, tv:1.25},
+      {t:'MBT', n:'Micro Bitcoin',          g:'Crypto',     ts:5,      tv:0.50},
+      {t:'MET', n:'Micro Ether',            g:'Crypto',     ts:0.50,   tv:0.05},
+    ],
+    emini: [
+      {t:'NQ',  n:'E-mini Nasdaq-100',      g:'Indexes',    ts:0.25,   tv:5.00},
+      {t:'ES',  n:'E-mini S&P 500',         g:'Indexes',    ts:0.25,   tv:12.50},
+      {t:'YM',  n:'E-mini Dow',             g:'Indexes',    ts:1,      tv:5.00},
+      {t:'RTY', n:'E-mini Russell 2000',    g:'Indexes',    ts:0.10,   tv:5.00},
+      {t:'GC',  n:'Gold',                   g:'Metals',     ts:0.10,   tv:10.00},
+      {t:'SI',  n:'Silver',                 g:'Metals',     ts:0.005,  tv:25.00},
+      {t:'HG',  n:'Copper',                 g:'Metals',     ts:0.0005, tv:12.50},
+      {t:'CL',  n:'Crude Oil',              g:'Energy',     ts:0.01,   tv:10.00},
+      {t:'NG',  n:'Natural Gas',            g:'Energy',     ts:0.001,  tv:10.00},
+      {t:'6E',  n:'Euro FX',                g:'Currencies', ts:0.00005,   tv:6.25},
+      {t:'6B',  n:'British Pound',          g:'Currencies', ts:0.0001,    tv:6.25},
+      {t:'6A',  n:'Australian Dollar',      g:'Currencies', ts:0.00005,   tv:5.00},
+      {t:'6C',  n:'Canadian Dollar',        g:'Currencies', ts:0.00005,   tv:5.00},
+      {t:'6J',  n:'Japanese Yen',           g:'Currencies', ts:0.0000005, tv:6.25},
+      {t:'ZN',  n:'10-Year T-Note',         g:'Bonds',      ts:0.015625,  tv:15.625, note:'enter points as decimals (½ of 1/32 = 0.015625)'},
+      {t:'ZB',  n:'30-Year T-Bond',         g:'Bonds',      ts:0.03125,   tv:31.25,  note:'enter points as decimals (1/32 = 0.03125)'},
+      {t:'BTC', n:'Bitcoin',                g:'Crypto',     ts:5,      tv:25.00},
+      {t:'ETH', n:'Ether',                  g:'Crypto',     ts:0.50,   tv:25.00},
+      {t:'ZC',  n:'Corn',                   g:'Grains',     ts:0.25,   tv:12.50, note:'prices in cents'},
+      {t:'ZS',  n:'Soybeans',               g:'Grains',     ts:0.25,   tv:12.50, note:'prices in cents'},
+      {t:'ZW',  n:'Wheat',                  g:'Grains',     ts:0.25,   tv:12.50, note:'prices in cents'},
+    ],
+    enano: [
+      {t:'NNQ',  n:'E-nano Nasdaq-100',     g:'Indexes',    ts:0.50,   tv:0.10},
+      {t:'NES',  n:'E-nano S&P 500',        g:'Indexes',    ts:0.50,   tv:0.25},
+      {t:'NDOW', n:'E-nano Dow',            g:'Indexes',    ts:2,      tv:0.10},
+      {t:'N2K',  n:'E-nano Russell 2000',   g:'Indexes',    ts:0.20,   tv:0.10},
+    ]
+  };
+  const DEFAULT_FAVS = { micro:['MNQ','MES','MGC','MYM'], emini:['NQ','ES','GC','YM'], enano:['NNQ','NES','NDOW','N2K'] };
+  const KEY = 'trade_calc_v2';
+  const FIELDS = ['fee','entry','sl','tp','acct','dd','riskPct'];
+
+  const state = {
+    tier:'micro', instr:'MNQ', favs:JSON.parse(JSON.stringify(DEFAULT_FAVS)),
+    tab:'st', dir:null, contracts:1, rr:null
+  };
+
+  /* ---------- helpers ---------- */
+  const spec = () => INSTR[state.tier].find(i=>i.t===state.instr) || INSTR[state.tier][0];
+  const num = id => { const v = parseFloat($(id).value); return isNaN(v) ? null : v; };
+  function decs(x){ let d=0; while(d<10 && Math.abs(Math.round(x*10**d) - x*10**d) > 1e-7) d++; return d; }
+  const fixed = (x,d) => x.toFixed(d);
+  const trim = x => String(parseFloat(x.toFixed(6)));
+  function money(n, allowSub){
+    const a = Math.abs(n);
+    const max = allowSub ? 4 : 2;
+    return '$' + a.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:max});
+  }
+  function moneyShort(n){
+    const a = Math.abs(n);
+    return '$' + a.toLocaleString('en-US',{minimumFractionDigits:a>=1000?0:2,maximumFractionDigits:a>=1000?0:2});
+  }
+
+  /* ---------- storage ---------- */
+  function save(){
+    try{
+      const d = { tier:state.tier, instr:state.instr, favs:state.favs, tab:state.tab, dir:state.dir, contracts:state.contracts, rr:state.rr };
+      FIELDS.forEach(f=> d[f] = $(f).value);
+      localStorage.setItem(KEY, JSON.stringify(d));
+    }catch(e){}
+  }
+  function load(){
+    let d = null;
+    try{ d = JSON.parse(localStorage.getItem(KEY) || 'null'); }catch(e){}
+    if(!d){
+      // carry over inputs from the old Unicorn calculator if it was used on this device
+      try{
+        const o = JSON.parse(localStorage.getItem('unicorn_calc_v1') || 'null');
+        if(o) d = { tier:o.tier, instr:o.instrument, contracts:o.contracts, sl:o.slPoints, tp:o.tpPoints,
+                    acct:o.accountSize, dd:o.maxDd, riskPct:o.riskPct };
+      }catch(e){}
+    }
+    if(!d) return;
+    if(d.favs){
+      for(const t in DEFAULT_FAVS){
+        if(Array.isArray(d.favs[t])) state.favs[t] = d.favs[t].filter(x=>INSTR[t].some(i=>i.t===x));
       }
-    };
-
-    const state = {
-      tier: 'micro',
-      instrument: 'MNQ',
-      contracts: 1,
-      rrSelected: null,
-      posSizeOpen: false,
-    };
-
-    function getSpec(instrument) {
-      return TIERS[state.tier].instruments[instrument];
     }
-    function pointValue(instrument) {
-      const spec = getSpec(instrument);
-      return spec.tickValue / spec.tickSize;
-    }
-    function trimNum(n) {
-      return parseFloat(n.toFixed(4)).toString();
-    }
+    if(INSTR[d.tier]) state.tier = d.tier;
+    state.instr = INSTR[state.tier].some(i=>i.t===d.instr) ? d.instr : (state.favs[state.tier][0] || INSTR[state.tier][0].t);
+    state.tab = d.tab === 'ps' ? 'ps' : 'st';
+    state.dir = (d.dir==='long' || d.dir==='short') ? d.dir : null;
+    state.contracts = Math.max(1, parseInt(d.contracts,10) || 1);
+    state.rr = [1,2,3,4].includes(d.rr) ? d.rr : null;
+    FIELDS.forEach(f=>{ if(d[f] != null) $(f).value = d[f]; });
+  }
 
-    function renderInstrumentButtons() {
-      const row = document.getElementById('instrument-row');
-      const tickers = Object.keys(TIERS[state.tier].instruments);
-      row.innerHTML = tickers.map(t =>
-        '<button class="pill-btn' + (t === state.instrument ? ' active' : '') +
-        '" id="inst-' + t + '" onclick="setInstrument(\'' + t + '\')">' + t + '</button>'
-      ).join('');
-    }
+  /* ---------- tabs ---------- */
+  function showTab(tab){
+    state.tab = tab;
+    document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+    $('tab-st').hidden = tab !== 'st';
+    $('tab-ps').hidden = tab !== 'ps';
+    save();
+  }
+  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click', ()=>{ showTab(b.dataset.tab); window.scrollTo(0,0); }));
 
-    function setTier(tier) {
-      state.tier = tier;
-      ['micro', 'emini', 'enano'].forEach(t => {
-        document.getElementById('tier-' + t).classList.toggle('active', t === tier);
-      });
-      state.instrument = Object.keys(TIERS[tier].instruments)[0];
-      renderInstrumentButtons();
-      renderStopTarget();
-      renderSize();
-    }
+  /* ---------- contract size + instrument ---------- */
+  function renderTier(){
+    document.querySelectorAll('#tier button').forEach(b=>b.classList.toggle('active', b.dataset.v===state.tier));
+  }
+  function renderInstr(){
+    const list = INSTR[state.tier], favs = state.favs[state.tier];
+    $('favs').innerHTML = favs.map(t=>`<button type="button" class="${t===state.instr?'active':''}" data-t="${t}">${t}</button>`).join('');
+    $('favs').hidden = !favs.length;
 
-    function setInstrument(instrument) {
-      state.instrument = instrument;
-      Object.keys(TIERS[state.tier].instruments).forEach(i => {
-        const btn = document.getElementById('inst-' + i);
-        if (btn) btn.classList.toggle('active', i === instrument);
-      });
-      renderStopTarget();
-      renderSize();
-    }
+    const groups = [...new Set(list.map(i=>i.g))];
+    $('instrSel').innerHTML = groups.map(g =>
+      `<optgroup label="${g}">` +
+      list.filter(i=>i.g===g).map(i=>`<option value="${i.t}">${i.t} — ${i.n.replace(/&/g,'&amp;')}</option>`).join('') +
+      '</optgroup>').join('');
+    $('instrSel').value = state.instr;
 
-    function stepContracts(delta) {
-      const input = document.getElementById('contracts');
-      let val = parseInt(input.value, 10);
-      if (isNaN(val) || val < 1) val = 1;
-      val = Math.max(1, val + delta);
-      input.value = val;
-      onContractsChange();
-    }
-    function onContractsChange() {
-      const input = document.getElementById('contracts');
-      let val = parseInt(input.value, 10);
-      if (isNaN(val) || val < 1) val = 1;
-      state.contracts = val;
-      renderStopTarget();
-    }
+    const on = favs.includes(state.instr);
+    $('star').classList.toggle('on', on);
+    $('star').textContent = on ? '★' : '☆';
+    $('star').setAttribute('aria-label', on ? 'Remove from favorites' : 'Add to favorites');
 
-    function setRRPoints(multiplier) {
-      const slEl = document.getElementById('sl-points');
-      const tpEl = document.getElementById('tp-points');
-      const slPoints = parseFloat(slEl.value);
-      if (isNaN(slPoints)) return;
-      tpEl.value = trimNum(slPoints * multiplier);
-      [1, 2, 3, 4].forEach(m => {
-        document.getElementById('rr-' + m).classList.toggle('active', m === multiplier);
-      });
-      state.rrSelected = multiplier;
-      renderStopTarget();
-    }
-    function clearRRSelection() {
-      [1, 2, 3, 4].forEach(m => {
-        document.getElementById('rr-' + m).classList.remove('active');
-      });
-      state.rrSelected = null;
-    }
+    const s = spec();
+    $('specLine').textContent = `${s.n} · ${fixed(s.ts, decs(s.ts))} pt tick = ${money(s.tv, true)}` + (s.note ? ` · ${s.note}` : '');
+  }
+  function setInstr(t){ state.instr = t; renderInstr(); renderAll(); }
 
-    function togglePositionSize() {
-      const panel = document.getElementById('panel-size');
-      const toggle = document.querySelector('.collapse-toggle');
-      state.posSizeOpen = panel.style.display === 'none';
-      panel.style.display = state.posSizeOpen ? '' : 'none';
-      toggle.classList.toggle('open', state.posSizeOpen);
-      saveState();
-    }
+  document.querySelectorAll('#tier button').forEach(b=>b.addEventListener('click', ()=>{
+    state.tier = b.dataset.v;
+    state.instr = state.favs[state.tier][0] || INSTR[state.tier][0].t;
+    renderTier(); renderInstr(); renderAll();
+  }));
+  $('favs').addEventListener('click', e=>{
+    const b = e.target.closest('button[data-t]'); if(b) setInstr(b.dataset.t);
+  });
+  $('instrSel').addEventListener('change', e=> setInstr(e.target.value));
+  $('star').addEventListener('click', ()=>{
+    const favs = state.favs[state.tier], i = favs.indexOf(state.instr);
+    if(i >= 0) favs.splice(i,1); else favs.push(state.instr);
+    renderInstr(); save();
+  });
 
-    function renderStopTarget() {
-      const slEl = document.getElementById('sl-points');
-      const tpEl = document.getElementById('tp-points');
-      const slSubEl = document.getElementById('sl-sub');
-      const tpSubEl = document.getElementById('tp-sub');
-      const slDollarEl = document.getElementById('sl-dollar');
-      const tpDollarEl = document.getElementById('tp-dollar');
-      saveState();
+  /* ---------- direction ---------- */
+  document.querySelectorAll('#dir button').forEach(b=>b.addEventListener('click', ()=>{
+    state.dir = state.dir === b.dataset.v ? null : b.dataset.v;
+    renderDir(); renderAll();
+  }));
+  function renderDir(){
+    document.querySelectorAll('#dir button').forEach(b=>b.classList.toggle('active', b.dataset.v===state.dir));
+  }
 
-      const spec = getSpec(state.instrument);
-      const pv = pointValue(state.instrument);
-      const ticksPerPoint = 1 / spec.tickSize;
+  /* ---------- contracts ---------- */
+  function setContracts(n){
+    state.contracts = Math.max(1, n|0);
+    $('contracts').value = state.contracts;
+    renderAll();
+  }
+  document.querySelectorAll('.stepper button').forEach(b=>b.addEventListener('click', ()=>{
+    setContracts((parseInt($('contracts').value,10) || 1) + Number(b.dataset.step));
+  }));
+  $('contracts').addEventListener('input', ()=>{
+    const v = parseInt($('contracts').value,10);
+    state.contracts = isNaN(v) || v < 1 ? 1 : v;
+    renderAll();
+  });
+  $('contracts').addEventListener('blur', ()=>{ $('contracts').value = state.contracts; });
 
-      const slPoints = parseFloat(slEl.value);
-      if (isNaN(slPoints)) {
-        slSubEl.textContent = '— pts · — ticks';
-        slDollarEl.textContent = '$0.00';
-      } else {
-        const ticks = slPoints * ticksPerPoint;
-        const dollars = slPoints * pv * state.contracts;
-        slSubEl.textContent = trimNum(slPoints) + ' pts \u00b7 ' + trimNum(ticks) + ' ticks';
-        slDollarEl.textContent = '$' + dollars.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      }
+  /* ---------- stop (shared by both tabs) + R:R ---------- */
+  function renderRR(){
+    document.querySelectorAll('#rr button').forEach(b=>b.classList.toggle('active', Number(b.dataset.v)===state.rr));
+  }
+  function applyRR(){
+    const sl = num('sl');
+    if(state.rr && sl != null) $('tp').value = trim(sl * state.rr);
+  }
+  document.querySelectorAll('#rr button').forEach(b=>b.addEventListener('click', ()=>{
+    const m = Number(b.dataset.v);
+    if(num('sl') == null){ $('sl').focus(); return; }
+    state.rr = state.rr === m ? null : m;
+    applyRR(); renderRR(); renderAll();
+  }));
+  $('sl').addEventListener('input', ()=>{ $('sl2').value = $('sl').value; applyRR(); renderAll(); });
+  $('sl2').addEventListener('input', ()=>{ $('sl').value = $('sl2').value; applyRR(); renderAll(); });
+  $('tp').addEventListener('input', ()=>{ state.rr = null; renderRR(); renderAll(); });
+  ['fee','entry','acct','dd','riskPct'].forEach(id=>$(id).addEventListener('input', renderAll));
 
-      const tpPoints = parseFloat(tpEl.value);
-      if (isNaN(tpPoints)) {
-        tpSubEl.textContent = '— pts · — ticks';
-        tpDollarEl.textContent = '$0.00';
-      } else {
-        const ticks = tpPoints * ticksPerPoint;
-        const dollars = tpPoints * pv * state.contracts;
-        tpSubEl.textContent = trimNum(tpPoints) + ' pts \u00b7 ' + trimNum(ticks) + ' ticks';
-        tpDollarEl.textContent = '$' + dollars.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      }
-    }
+  /* ---------- stop & target math ---------- */
+  function renderST(){
+    const s = spec(), pv = s.tv / s.ts, n = state.contracts, d = decs(s.ts);
+    const fee = Math.max(0, num('fee') || 0), feeT = fee * n;
+    const entry = num('entry');
+    const sl = num('sl'), tp = num('tp');
 
-    function renderSize() {
-      const accountEl = document.getElementById('account-size');
-      const maxDdEl = document.getElementById('max-dd');
-      const bufferEl = document.getElementById('buffer-line');
-      const riskPctEl = document.getElementById('risk-pct');
-      const stopTicksEl = document.getElementById('stop-ticks');
-      const maxRiskEl = document.getElementById('size-maxrisk');
-      const contractsEl = document.getElementById('size-contracts');
-      const actualRiskEl = document.getElementById('size-actualrisk');
-      saveState();
-
-      const account = parseFloat(accountEl.value);
-      const maxDd = parseFloat(maxDdEl.value);
-      const riskPct = parseFloat(riskPctEl.value);
-      const stopTicks = parseFloat(stopTicksEl.value);
-      const spec = getSpec(state.instrument);
-
-      let buffer = null;
-      if (!isNaN(account)) {
-        buffer = isNaN(maxDd) ? account : account - maxDd;
-        bufferEl.textContent = isNaN(maxDd) ? '' : 'Buffer: $' + buffer.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      } else {
-        bufferEl.textContent = '';
-      }
-
-      if (buffer === null || isNaN(riskPct)) {
-        maxRiskEl.textContent = '—';
-        contractsEl.textContent = '—';
-        actualRiskEl.textContent = '—';
+    function side(pts, raw, isStop, pre){
+      const priceEl = $(pre+'Price'), ptsEl = $(pre+'Pts'), amtEl = $(pre+'Amt'), noteEl = $(pre+'Note');
+      if(pts == null){
+        priceEl.hidden = true;
+        ptsEl.textContent = '— pts · — ticks';
+        amtEl.textContent = '$0.00';
+        noteEl.textContent = '';
         return;
       }
-
-      const maxRisk = buffer * (riskPct / 100);
-      maxRiskEl.textContent = '$' + maxRisk.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-      if (isNaN(stopTicks) || stopTicks <= 0) {
-        contractsEl.textContent = '—';
-        actualRiskEl.textContent = '—';
-        return;
-      }
-
-      const riskPerContract = stopTicks * spec.tickValue;
-      const suggested = Math.floor(maxRisk / riskPerContract);
-      contractsEl.textContent = suggested;
-      const actualRisk = suggested * riskPerContract;
-      actualRiskEl.textContent = '$' + actualRisk.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const ticks = pts / s.ts;
+      const whole = Math.abs(ticks - Math.round(ticks)) < 1e-6;
+      ptsEl.textContent = `${raw} pts · ${trim(ticks)} ticks`;
+      const gross = pts * pv * n;
+      const net = isStop ? gross + feeT : gross - feeT;
+      amtEl.textContent = (isStop ? '−' : (net < 0 ? '−' : '+')) + money(net);
+      let note = '';
+      if(feeT > 0) note = isStop ? `incl. ${money(feeT)} fees` : `after ${money(feeT)} fees`;
+      if(!whole) note = `Not a whole tick (${fixed(s.ts, d)} pt ticks)`;
+      noteEl.textContent = note;
+      if(entry != null && state.dir){
+        const up = (state.dir === 'long') !== isStop;
+        const price = up ? entry + pts : entry - pts;
+        priceEl.textContent = '@ ' + fixed(price, Math.max(d, decs(entry)));
+        priceEl.hidden = false;
+      } else priceEl.hidden = true;
     }
+    side(sl, $('sl').value, true, 'st');
+    side(tp, $('tp').value, false, 'tp');
 
-    function clearAll() {
-      state.tier = 'micro';
-      state.instrument = 'MNQ';
-      state.contracts = 1;
-      state.rrSelected = null;
-      state.posSizeOpen = false;
+    $('dirHint').textContent = (entry != null && !state.dir) ? 'Pick Long or Short to see your stop and target prices.' : '';
 
-      ['sl-points', 'tp-points', 'account-size', 'max-dd', 'risk-pct', 'stop-ticks'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      document.getElementById('contracts').value = 1;
-
-      ['micro', 'emini', 'enano'].forEach(t => {
-        document.getElementById('tier-' + t).classList.toggle('active', t === 'micro');
-      });
-      renderInstrumentButtons();
-      clearRRSelection();
-
-      const panel = document.getElementById('panel-size');
-      const toggle = document.querySelector('.collapse-toggle');
-      panel.style.display = 'none';
-      toggle.classList.remove('open');
-
-      renderStopTarget();
-      renderSize();
-      safeSet('unicorn_calc_v1', JSON.stringify({ tier: 'micro', instrument: 'MNQ', contracts: 1 }));
+    let rr = '';
+    if(sl > 0 && tp != null){
+      rr = `Risk : Reward  1 : ${(tp/sl).toFixed(2)}`;
+      if(feeT > 0) rr += `  ·  after fees 1 : ${((tp*pv*n - feeT) / (sl*pv*n + feeT)).toFixed(2)}`;
     }
+    $('rrLine').textContent = rr;
+  }
 
-    function safeSet(key, value) {
-      try { localStorage.setItem(key, value); } catch (e) { console.warn('Could not save state:', e); }
+  /* ---------- position size math ---------- */
+  let applyCount = 0;
+  function renderPS(){
+    const s = spec(), pv = s.tv / s.ts;
+    const fee = Math.max(0, num('fee') || 0);
+    const acct = num('acct'), dd = num('dd'), pct = num('riskPct'), sl = num('sl');
+    const useDD = dd != null && dd > 0;
+    const basis = useDD ? dd : acct;
+
+    $('riskLabel').textContent = useDD ? 'Risk % of drawdown' : 'Risk % of account';
+    $('basisLine').textContent = useDD ? `Prop mode: risk is a % of your ${moneyShort(dd)} drawdown, not the account size.` : '';
+
+    $('sMax').textContent = '—'; $('sCon').textContent = '—'; $('sAct').textContent = '—';
+    $('psDetail').textContent = ''; $('psWarn').hidden = true; $('btnApply').hidden = true;
+
+    if(basis == null || basis <= 0 || pct == null || pct <= 0) return;
+    const maxRisk = basis * pct / 100;
+    $('sMax').textContent = moneyShort(maxRisk);
+
+    if(sl == null || sl <= 0){ $('psDetail').textContent = 'Add your stop to size the position.'; return; }
+
+    const per = sl * pv + fee;
+    const c = Math.floor(maxRisk / per + 1e-9);
+    $('sCon').textContent = c;
+    $('sAct').textContent = moneyShort(c * per);
+    $('psDetail').textContent = `1 ${s.t} contract risks ${money(per)} with a ${$('sl').value} pt stop${fee > 0 ? ' (incl. fees)' : ''}.`;
+
+    if(c === 0){
+      $('psWarn').textContent = `Stop too wide: 1 contract risks ${money(per)}, which is over your ${money(maxRisk)} limit. Tighten your stop` +
+        (state.tier === 'enano' ? '.' : ' or switch to a smaller contract size.');
+      $('psWarn').hidden = false;
+    } else if(c !== state.contracts){
+      applyCount = c;
+      $('btnApply').textContent = `Use ${c} contract${c > 1 ? 's' : ''}`;
+      $('btnApply').hidden = false;
     }
+  }
+  $('btnApply').addEventListener('click', ()=>{ setContracts(applyCount); showTab('st'); window.scrollTo(0,0); });
 
-    function saveState() {
-      const payload = {
-        tier: state.tier,
-        instrument: state.instrument,
-        contracts: state.contracts,
-        rrSelected: state.rrSelected,
-        slPoints: document.getElementById('sl-points').value,
-        tpPoints: document.getElementById('tp-points').value,
-        posSizeOpen: state.posSizeOpen,
-        accountSize: document.getElementById('account-size').value,
-        maxDd: document.getElementById('max-dd').value,
-        riskPct: document.getElementById('risk-pct').value,
-        stopTicks: document.getElementById('stop-ticks').value,
-      };
-      safeSet('unicorn_calc_v1', JSON.stringify(payload));
-    }
+  function renderAll(){ renderST(); renderPS(); save(); }
 
-    function loadState() {
-      let saved = null;
-      try {
-        const raw = localStorage.getItem('unicorn_calc_v1');
-        if (raw) saved = JSON.parse(raw);
-      } catch (e) {
-        console.warn('Could not load state:', e);
-      }
-      if (!saved) {
-        renderStopTarget();
-        return;
-      }
+  /* ---------- clear ---------- */
+  $('btnClear').addEventListener('click', ()=>{
+    ['entry','sl','sl2','tp'].forEach(id=>$(id).value='');
+    state.dir = null; state.rr = null;
+    $('contracts').value = state.contracts = 1;
+    renderDir(); renderRR(); renderAll();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
 
-      state.tier = saved.tier || 'micro';
-      const tierInstruments = Object.keys(TIERS[state.tier].instruments);
-      state.instrument = (saved.instrument && tierInstruments.includes(saved.instrument))
-        ? saved.instrument
-        : tierInstruments[0];
-      state.contracts = saved.contracts || 1;
-      state.rrSelected = saved.rrSelected || null;
-      state.posSizeOpen = !!saved.posSizeOpen;
-
-      ['micro', 'emini', 'enano'].forEach(t => {
-        document.getElementById('tier-' + t).classList.toggle('active', t === state.tier);
-      });
-      renderInstrumentButtons();
-
-      document.getElementById('contracts').value = state.contracts;
-      document.getElementById('sl-points').value = saved.slPoints || '';
-      document.getElementById('tp-points').value = saved.tpPoints || '';
-      if (state.rrSelected) {
-        document.getElementById('rr-' + state.rrSelected).classList.add('active');
-      }
-      document.getElementById('account-size').value = saved.accountSize || '';
-      document.getElementById('max-dd').value = saved.maxDd || '';
-      document.getElementById('risk-pct').value = saved.riskPct || '';
-      document.getElementById('stop-ticks').value = saved.stopTicks || '';
-
-      const panel = document.getElementById('panel-size');
-      const toggle = document.querySelector('.collapse-toggle');
-      panel.style.display = state.posSizeOpen ? '' : 'none';
-      toggle.classList.toggle('open', state.posSizeOpen);
-
-      renderStopTarget();
-      renderSize();
-    }
-
-    function init() {
-      renderInstrumentButtons();
-      loadState();
-    }
-    init();
-  </script>
+  /* ---------- init ---------- */
+  load();
+  $('sl2').value = $('sl').value;
+  $('contracts').value = state.contracts;
+  renderTier(); renderInstr(); renderDir(); renderRR();
+  showTab(state.tab);
+  renderAll();
+})();
+</script>
 </body>
 </html>
